@@ -1,0 +1,86 @@
+body {
+    background: linear-gradient(180deg, #2b2d31 0%, #020c15 100%);
+    color: white;
+}
+
+h1, h2, h3, h4, h5, h6, p, pre, blockquote, form, dl, div, html {
+    margin: 0px;
+    padding: 0px;
+}
+
+/********* DETAIL VIEW *********/
+
+.detail-img {
+    border: #ffffff15 .1em solid;
+    margin: 0em auto;
+    -webkit-box-shadow: 6px 7px 12px -6px rgba(0,0,0,0.75);
+    -moz-box-shadow: 6px 7px 12px -6px rgba(0,0,0,0.75);
+    box-shadow: 6px 7px 12px -6px rgba(0,0,0,0.75);
+}
+
+.detail-header {
+    text-align: center;
+    padding: .3em 0em;
+}
+
+.detail-date {
+    text-align: center;
+    font-weight: 100;
+}
+
+.detail-content {
+    padding: .5em;
+    margin-top: 3em;
+    background-color: #37393b5f;
+    border-radius: .3em;
+}
+
+.detail-container {
+    /* border: #bfbfbf43 .1em solid; */
+    background: linear-gradient(180deg, #353e525d 0%, #0212215d 100%);
+    padding-top: 2.5em;
+    margin-bottom: 5em;
+    
+}
+
+.btn-delete {
+    background: linear-gradient(180deg, #353e525d 0%, #0212215d 100%);
+    border: #bfbfbf43 .1em solid;
+    color: aliceblue;
+    float: right;
+    width: 8em;
+    height: 2.6em;
+    font-weight: 700;
+}
+
+.btn-update {
+    background: linear-gradient(180deg, #353e525d 0%, #0212215d 100%);
+    border: #bfbfbf43 .1em solid;
+    color: aliceblue;
+    float: left;
+    width: 8em;
+    height: 2.6em;
+    font-weight: 700;
+}
+
+
+/************ LIST VIEW ************/
+
+
+.blocks {
+    background: linear-gradient(270deg, #2b2d31 0%, #020c15 100%);
+    border: #bfbfbf43 .1em solid;
+    -webkit-box-shadow: 6px 7px 12px -6px rgba(0,0,0,0.75);
+    -moz-box-shadow: 6px 7px 12px -6px rgba(0,0,0,0.75);
+    box-shadow: 6px 7px 12px -6px rgba(0,0,0,0.75);
+}
+
+
+/************ MARK DOWN RENDERERS ************/
+
+.code-blocks {
+    /* border: #bfbfbf43 .1em solid; */
+    color: aliceblue;
+    /* background: linear-gradient(180deg, #353e525d 0%, #0212215d 100%); */
+    /* padding-top: 2.5em; */
+}
