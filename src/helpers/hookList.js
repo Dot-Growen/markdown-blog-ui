@@ -1,28 +1,20 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios'
-import { authAxios } from '../services';
-import AuthContext from '../context/AuthContext';
 
-function useFetch(url, initialState=null) {
-    const [data, setData] = useState(initialState);
+function useFetchList(url) {
+    const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const { auth } = useContext(AuthContext);
-
     useEffect(() => {
+        console.log("Happening")
         async function fetchData() {
             setLoading(true)
             try {
-                let ax = axios
-                if(auth){
-                    ax = authAxios
-                } 
-                const res = await ax.get(url)
+                const res = await axios.get(url)
                 setData(res.data)
                 setLoading(false)
             } catch (error) {
-                console.log("eerrrrror => " + error)
                 setError(error.message)
                 setLoading(false)
             }
@@ -37,4 +29,4 @@ function useFetch(url, initialState=null) {
     }
 }
 
-export {useFetch}
+export {useFetchList}

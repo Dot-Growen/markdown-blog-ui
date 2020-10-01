@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react'
-import { Header, Button, Form, Image, Divider } from 'semantic-ui-react'
+import React, {useRef, useState } from 'react'
+import { Button, Form, Image, Divider } from 'semantic-ui-react'
 import MarkdownIt from 'markdown-it'
 import MdEditor from 'react-markdown-editor-lite'
 import Loader from '../components/Loader'
@@ -9,8 +9,9 @@ import { authAxios } from "../services"
 import { useFetch } from '../helpers'
 import { navigate } from '@reach/router'
 
+
 const PostUpdateForm = ({ postSlug, initialTitle, initialDescription, initialContent, initialThumbnail }) => {
-    console.log(initialThumbnail)
+   
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
 
@@ -32,6 +33,7 @@ const PostUpdateForm = ({ postSlug, initialTitle, initialDescription, initialCon
         if (thumbnail) formData.append('thumbnail', thumbnail)
         formData.append('title', title)
         formData.append('content', markdown)
+        formData.append('description', description)
         authAxios
             .put(api.posts.update(postSlug), formData, {
                 headers: {
@@ -50,14 +52,14 @@ const PostUpdateForm = ({ postSlug, initialTitle, initialDescription, initialCon
 
     return (
         <div>
-            <Header>Update post</Header>
+            <h2 className="create-title">Update post</h2>
             {error && <Message color='red' message={error} />}
             {currentThumbnail && <Image src={currentThumbnail} size='small' />}
             {thumbnail && <Message color='blue' message={`Selected image ${thumbnail.name}`} />}
             <Divider />
             <Form onSubmit={handleSubmit}>
                 <Form.Field>
-                    <label>Title</label>
+                    <label className="create-label text-white">Title</label>
                     <input
                         value={title}
                         onChange={e => setTitle(e.target.value)}
@@ -65,7 +67,7 @@ const PostUpdateForm = ({ postSlug, initialTitle, initialDescription, initialCon
                     />
                 </Form.Field>
                 <Form.Field>
-                    <label>Description</label>
+                    <label className="create-label text-white">Description</label>
                     <input
                         value={description}
                         onChange={e => setDescription(e.target.value)}
@@ -95,6 +97,7 @@ const PostUpdateForm = ({ postSlug, initialTitle, initialDescription, initialCon
                     />
                 </Form.Field>
                 <Button
+                    className="mt-3"
                     primary
                     fluid
                     loading={loading}
@@ -109,8 +112,9 @@ const PostUpdateForm = ({ postSlug, initialTitle, initialDescription, initialCon
 }
 
 const PostUpdate = props => {
-    const { data, loading, error } = useFetch(api.posts.retrieve(props.postSlug)) // Custom hook
-
+    
+    const { data, loading, error } = useFetch(api.posts.retrieve(props.postSlug)) 
+    
     if (data && data.is_author === false) {
         navigate(`/posts/${props.postSlug}`)
     }

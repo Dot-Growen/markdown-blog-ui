@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import Navbar from '../components/Navbar';
 import { Container } from 'semantic-ui-react'
 import AuthContext from '../context/AuthContext';
+import { authenticationService } from '../services';
+import { navigate } from '@reach/router';
 
 const Layout = ({ children }) => {
 
@@ -9,13 +11,15 @@ const Layout = ({ children }) => {
     console.log("auth => " + auth)
     
     const logout = () => {
+        authenticationService.logout()
         setAuth(false)
+        navigate('/')
     }
 
     return (
         <>
-            <Navbar isLoggedIn={auth} logout={logout} />
-            <Container text style={{ marginTop: '7em' }}>
+            <Navbar className="nav-bar" isLoggedIn={auth} logout={logout} />
+            <Container text className="main-container">
                 {children}
             </Container>
         </>

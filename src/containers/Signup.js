@@ -1,9 +1,14 @@
 import React, { useContext, useState } from 'react';
-import { Header, Button, Container, Form } from 'semantic-ui-react'
+import { Container } from 'semantic-ui-react'
+import { Button, Card, Form, Input } from 'antd';
 import { navigate } from "@reach/router"
 import Message from '../components/Message';
 import { authenticationService } from '../services'
 import AuthContext from '../context/AuthContext';
+import { UserOutlined, MailOutlined, LockOutlined, CheckCircleOutlined, EyeInvisibleOutlined, EyeTwoTone, } from '@ant-design/icons';
+import PostList from './PostList';
+
+
 
 const Signup = () => {
 
@@ -15,7 +20,7 @@ const Signup = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    const {auth, setAuth, setUser} = useContext(AuthContext);
+    const { setAuth } = useContext(AuthContext);
 
     const handleSubmit = (e) => {
         setLoading(true)
@@ -25,7 +30,6 @@ const Signup = () => {
                 localStorage.setItem("token", res.data.key)
                 setLoading(false);
                 setAuth(true)
-                setUser(username)
                 navigate('/')
             })
             .catch(error => {
@@ -35,55 +39,92 @@ const Signup = () => {
     }
 
     if (authenticationService.isAuthenticated) {
-        console.log(authenticationService.isAuthenticated)
-        navigate("/")
+        navigate('/')
+        return <PostList path='/'/>
     }
 
     return (
         <Container>
-            <Header>Signup for an account</Header>
-            {error && (
-                <Message color='red' message={error} />
-            )}
-            <Form onSubmit={handleSubmit}>
-                <Form.Field>
-                    <label>Username</label>
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={e => setUsername(e.target.value)}
-                        placeholder='Username'
-                    />
-                </Form.Field>
-                <Form.Field>
-                    <label>Email</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        placeholder='Email'
-                    />
-                </Form.Field>
-                <Form.Field>
-                    <label>Password</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        placeholder='Password'
-                    />
-                </Form.Field>
-                <Form.Field>
-                    <label>Confirm Password</label>
-                    <input
-                        type="password"
-                        value={confirmPassword}
-                        onChange={e => setConfirmPassword(e.target.value)}
-                        placeholder='Confirm Password'
-                    />
-                </Form.Field>
-                <Button primary fluid loading={loading} disabled={loading} type='submit'>Signup</Button>
-            </Form>
+            <Card bordered={false} className="join" hoverable >
+                <h2 className="create-title">Signup for an account</h2>
+                {error && (
+                    <Message color='red' message={error} />
+                )}
+                <Form
+                    name="basic"
+                    initialValues={{ remember: true }}
+                    onFinish={handleSubmit}
+                >
+                    <Form.Item
+                        rules={[{ required: true, message: 'Please input your username!' }]}
+                    >
+                        <label className="create-label text-white">Username</label>
+                        <Input
+                            type="text"
+                            value={username}
+                            onChange={e => setUsername(e.target.value)}
+                            prefix={<UserOutlined />}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your email!'
+                            }
+                        ]}
+                    >
+                        <label className="create-label text-white">Email</label>
+                        <Input
+                            type="email"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                            prefix={<MailOutlined />}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your password!'
+                            }
+                        ]}
+                    >
+                        <label className="create-label text-white">Password</label>
+                        <Input.Password
+                            type="password"
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                            prefix={<LockOutlined />}
+                            iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please confirm your password!'
+                            }
+                        ]}
+                    >
+                        <label className="create-label text-white">Confirm Password</label>
+                        <Input.Password
+                            type="password"
+                            value={confirmPassword}
+                            onChange={e => setConfirmPassword(e.target.value)}
+                            prefix={<CheckCircleOutlined />}
+                            iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                        />
+                    </Form.Item>
+                    <Button 
+                    type="primary" 
+                    htmlType="submit" 
+                    loading={loading} 
+                    disabled={loading} 
+                    onClick={handleSubmit}
+                    block>Signup</Button>
+                </Form>
+            </Card>
         </Container>
     );
 }

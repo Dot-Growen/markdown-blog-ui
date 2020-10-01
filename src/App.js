@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import 'semantic-ui-css/semantic.min.css'
+import 'antd/dist/antd.css';
 import { Router } from "@reach/router"
 import Layout from './containers/Layout';
 import PostList from './containers/PostList';
@@ -8,10 +9,12 @@ import PostDetail from './containers/PostDetail';
 import PostUpdate from './containers/PostUpdate';
 import Login from './containers/Login'
 import Signup from './containers/Signup';
-import PrivateRoute from './components/PrivateRoute';
 import AuthContext from './context/AuthContext'
 import { authenticationService } from './services';
 import "./styles.css"
+import { createBrowserHistory } from 'history';
+
+const history = createBrowserHistory()
 
 function App() {
 
@@ -20,11 +23,11 @@ function App() {
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
       <Layout>
-        <Router>
+        <Router history={history}>
           <PostList path='/' />
-          <PrivateRoute as={PostCreate} path='/create' />
+          <PostCreate path='/create' />
+          <PostUpdate path='/posts/:postSlug/update' />
           <PostDetail path='/posts/:postSlug' />
-          <PrivateRoute as={PostUpdate} path='/posts/:postSlug/update' />
           <Login path='/login' />
           <Signup path='/signup' />
         </Router>

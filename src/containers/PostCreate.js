@@ -2,11 +2,12 @@ import React, { useContext, useRef, useState } from 'react'
 import MarkdownIt from 'markdown-it'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css';
-import { Header, Button, Form } from 'semantic-ui-react'
+import { Button, Form } from 'semantic-ui-react'
 import { navigate } from "@reach/router"
 import Message from '../components/Message';
 import { api } from '../api'
-import { authAxios } from '../services'
+import { authAxios, authenticationService } from '../services'
+import Login from './Login';
 import AuthContext from '../context/AuthContext';
 
 const PostCreate = () => {
@@ -19,6 +20,8 @@ const PostCreate = () => {
     const [thumbnail, setThumbnail] = useState(null);
 
     const fileInputRef = useRef()
+
+    const { auth } = useContext(AuthContext);
 
     const mdParser = new MarkdownIt(/* Markdown-it options */);
 
@@ -48,16 +51,21 @@ const PostCreate = () => {
             })
     }
 
+    if (!auth) {
+        console.log(authenticationService.isAuthenticated)
+        return <Login path='/login' />
+    }
+
     return (
         <div>
-            <Header>Create a post</Header>
+            <h2 className="create-title">Create a post</h2>
             {error && (
                 <Message color='red' message={error} />
             )}
             {thumbnail && <Message color='blue' message={`Selected image ${thumbnail.name}`} />}
             <Form onSubmit={handleSubmit}>
                 <Form.Field>
-                    <label>Title</label>
+                    <label className="create-label text-white">Title</label>
                     <input
                         value={title}
                         onChange={e => setTitle(e.target.value)}
@@ -65,11 +73,11 @@ const PostCreate = () => {
                     />
                 </Form.Field>
                 <Form.Field>
-                    <label>Description</label>
+                    <label className="create-label text-white">Description</label>
                     <input
                         value={description}
                         onChange={e => setDescription(e.target.value)}
-                        placeholder='Short description for your post'
+                        placeholder='Short description for your post' className="create-label"
                     />
                 </Form.Field>
                 <MdEditor

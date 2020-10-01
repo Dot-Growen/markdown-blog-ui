@@ -1,70 +1,110 @@
-import React, { useContext, useState } from 'react';
-import { Header, Button, Container, Form } from 'semantic-ui-react'
-import { navigate } from "@reach/router"
-import Message from '../components/Message';
+import React, { useContext, useState } from 'react'
+import { Container } from 'semantic-ui-react'
+import { Card, Button, Input, Form } from 'antd'
+import { Link, navigate } from '@reach/router'
+import Message from '../components/Message'
 import { authenticationService } from '../services'
-import AuthContext from '../context/AuthContext';
+import AuthContext from '../context/AuthContext'
+import {
+    EyeInvisibleOutlined,
+    EyeTwoTone,
+    LockOutlined,
+    UserOutlined
+} from '@ant-design/icons'
+import PostList from './PostList'
 
 const Login = () => {
+    const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(false)
 
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
 
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const { setAuth } = useContext(AuthContext)
 
-    const {setAuth} = useContext(AuthContext);
-    
-
-    const handleSubmit = (e) => {
+    const handleSubmit = e => {
         setLoading(true)
         e.preventDefault()
-        authenticationService.login(username, password)
+        authenticationService
+            .login(username, password)
             .then(res => {
-                localStorage.setItem("token", res.data.key)
-                setLoading(false);
+                localStorage.setItem('token', res.data.key)
+                setLoading(false)
                 setAuth(true)
                 navigate('/')
             })
             .catch(error => {
                 setLoading(false)
-                setError("Invalid credentials, please try again." || error)
+                setError('Invalid credentials, please try again.' || error)
             })
     }
 
     if (authenticationService.isAuthenticated) {
-        navigate("/")
+        navigate('/')
+        return <PostList path='/'/>
     }
 
     return (
         <Container>
-            <Header>Login to your account</Header>
-            {error && (
-                <Message color='red' message={error} />
-            )}
-            <Form onSubmit={handleSubmit}>
-                <Form.Field>
-                    <label>Username</label>
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={e => setUsername(e.target.value)}
-                        placeholder='Username'
-                    />
-                </Form.Field> 
-                <Form.Field>
-                    <label>Password</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        placeholder='Password'
-                    />
-                </Form.Field>
-                <Button primary fluid loading={loading} disabled={loading} type='submit'>Login</Button>
-            </Form>
+            <Card bordered={false} className='join' hoverable>
+                <h2 className='create-title'>Login to your account</h2>
+                {error && <Message color='red' message={error} />}
+                <Form
+                    name='basic'
+                    initialValues={{ remember: true }}
+                >
+                    <Form.Item
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your username!'
+                            }
+                        ]}
+                    >
+                        <label className='create-label text-white'>Username</label>
+                        <Input
+                            type='text'
+                            value={username}
+                            onChange={e => setUsername(e.target.value)}
+                            prefix={<UserOutlined />}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your password!'
+                            }
+                        ]}
+                    >
+                        <label className='create-label text-white'>Password</label>
+                        <Input.Password
+                            type='password'
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                            prefix={<LockOutlined />}
+                            iconRender={visible =>
+                                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                            }
+                        />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button
+                            type='primary'
+                            htmlType='submit'
+                            onClick={handleSubmit}
+                            loading={loading}
+                            disabled={loading}
+                            block
+                        >
+                            Login
+                        </Button>
+                    </Form.Item>
+                    <Link to={'/signup'}>Signup now!</Link>
+                </Form>
+            </Card>
         </Container>
-    );
+    )
 }
 
-export default Login;
+export default Login

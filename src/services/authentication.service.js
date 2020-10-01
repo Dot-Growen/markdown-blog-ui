@@ -1,10 +1,11 @@
-import { navigate} from '@reach/router'
+import { navigate } from '@reach/router'
 import axios from 'axios'
 import { api } from '../api'
 
 
 const authAxios = axios.create()
 
+// Our own instance of axios which will always be authenticated
 authAxios.interceptors.request.use(config => {
     const newConfig = config
     const token = localStorage.getItem("token")
@@ -31,19 +32,19 @@ function login(username, password) {
 }
 
 function signup(username, email, password1, password2) {
-    navigate('/')
     return axios.post(api.auth.register, {
         username, email, password1, password2
     })
     .then(res => {
         console.log(res.data)
         localStorage.setItem("token", res.data.key)
+        navigate('/')
         return res
     })
 }
 
 function logout() {
-    localStorage.removeItem("token")
+    localStorage.removeItem("token");
 }
 
 const authenticationService = {

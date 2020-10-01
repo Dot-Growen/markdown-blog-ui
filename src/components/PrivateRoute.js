@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import Login from '../containers/Login';
 import AuthContext from '../context/AuthContext';
+import { authenticationService } from '../services';
 
-const PrivateRoute = ({ as: Component, ...props }) => {
-    const { auth } = useContext(AuthContext);
+const PrivateRoute = (props) => {
 
-    if (auth) {
-        return <Component {...props} />
-    }
-    return <Login path="/login"/>
+    const { user } = useContext(AuthContext);
+
+    let { as: Comp, ...rest } = props;
+    return user ? <Comp {...rest} /> : <Login />;
 }
 
 
